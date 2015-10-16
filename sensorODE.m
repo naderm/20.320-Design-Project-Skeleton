@@ -19,9 +19,9 @@ in1 = u(1);
 in2 = u(2);
 
 %% Determine ODEs of the system and set dydt
+% dydt should be a vector of the same size as y
+dydt = [
+    0, 
+];
 
-    
-
-
-    
 end

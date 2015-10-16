@@ -1,6 +1,6 @@
 function [output,outputTime,input,inputTime] = ...
     sensorODE_solver(sensorODE_fh,inputStates,chatter,stochasticity,...
-    maxInputAmpl,initCond)
+    initCond)
 % THIS FUNCTION SHOULD NOT BE MODIFIED
 % The "sensorODE_solver" function solves the "sensorODE" model.
 %
@@ -27,10 +27,6 @@ function [output,outputTime,input,inputTime] = ...
 %      This is a flag denoting the presence of noise due to stochastic 
 %      fluctuations.
 %      Note: If "chatter" is "true" this variable must be false.
-%
-%   maxInputAmpl - (1 x 1 number)
-%      This scalar reflects the magnitude of the input. In other words, it 
-%      is the concentration of the virus that is present.
 % 
 %   initCond - (Sn x 1 number)
 %      This vector denotes the initial state conditions for the "sensorODE"
@@ -114,7 +110,6 @@ tMax  = tStep*nSteps; % = 180
 tSpan = [0,tMax-1];
 
 %% Define input characteristics
-maxInput  = maxInputAmpl;
 inputTime = 0:1:tSpan(end);
 
 %% Create input vectors
@@ -126,17 +121,15 @@ end
 
 if chatter
     noiseProb = 0.02;
-    randV = rand(2,tMax);
+    randV = rand(size(inputStates,1),tMax);
     input(randV<noiseProb) = ~input(randV<noiseProb);
 end
 
 if stochasticity
     noiseMean = 0;
-    noiseVar = .01/maxInput;
+    noiseVar = .01/max(inputStates(1,:));
     input = abs(input+(noiseMean + sqrt(noiseVar)*randn(2,tMax)));
 end
-
-input = input*maxInput;
 
 %% Define the initial conditions and run ODE solver with noise
 y0 = initCond;

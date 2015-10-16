@@ -34,11 +34,12 @@ initCond = [];
 %% Set Noise Flags
 chatter       = false;
 stochasticity = false;
-maxInputAmpl  = 10; % Concentration of virus present
 
-% Solve "sensorODE" - do not modify this
+%% Solve "sensorODE" - do not modify this.
+% Output times will be in units of seconds.
+
 [output,outputTime,input,inputTime] = sensorODE_solver(@sensorODE,...
-    sensorInput,chatter,stochasticity,maxInputAmpl,initCond);
+    sensorInput,chatter,stochasticity,initCond);
 
 %% Plot Results
 % Simulate the sensor's response to the given (noise-free) input 
