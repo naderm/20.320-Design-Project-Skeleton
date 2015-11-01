@@ -22,6 +22,10 @@ stochasticity = false;
 [output,outputTime,input,inputTime] = sensorODE_solver(@sensorODE,...
     sensorInput,chatter,stochasticity,initCond);
 
+options = odeset('MaxStep', 1);
+[output,outputTime,input,inputTime] = sensorODE_solver(@sensorODE,...
+    sensorInput,chatter,stochasticity,initCond, options);
+
 %% Test Chatter
 chatter       = true;
 stochasticity = false;

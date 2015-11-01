@@ -1,6 +1,6 @@
 function [output,outputTime,input,inputTime] = ...
     sensorODE_solver(sensorODE_fh,inputStates,chatter,stochasticity,...
-    initCond)
+    initCond, options)
 % THIS FUNCTION SHOULD NOT BE MODIFIED
 % The "sensorODE_solver" function solves the "sensorODE" model.
 %
@@ -34,6 +34,11 @@ function [output,outputTime,input,inputTime] = ...
 %      system. 
 %      This is the vector with the initial conditions for each of your 
 %      species in your ODE model.
+%
+%   options - (1 x 1 options)
+%       Optional argument to pass options to ode23s. This can be used to change
+%       the solver tolerance in cases where your output is accidentally dropping
+%       into negative values.
 %
 %
 % FUNCTION OUTPUTS:
@@ -74,7 +79,7 @@ function [output,outputTime,input,inputTime] = ...
 %--------------------------------------------------------------------------
 
 %% Check input arguments
-narginchk(2,6)
+narginchk(2,7)
 
 % Error flags if something is wrong:
 if ~isa(sensorODE_fh, 'function_handle')
@@ -131,10 +136,14 @@ if stochasticity
     input = abs(input+(noiseMean + sqrt(noiseVar)*randn(2,tMax)));
 end
 
+if nargin < 7
+    options = odeset();
+end
+
 %% Define the initial conditions and run ODE solver with noise
 y0 = initCond;
 [outputTime,output] = ode23s(@(t,y) sensorODEVectorInputs(sensorODE_fh,...
-    t,y,inputTime,input),tSpan,y0);
+    t,y,inputTime,input),tSpan,y0, options);
 
 end
 
