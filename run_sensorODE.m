@@ -29,7 +29,9 @@ sensorInput = [];
 %% Define Initial Conditions for Each of Your Species
 % The following vector must be Sn x 1, where Sn reflects the number of 
 % states/species in your system.
-initCond = [];
+initCond = [
+    0;
+];
            
 %% Set Noise Flags
 chatter       = false;

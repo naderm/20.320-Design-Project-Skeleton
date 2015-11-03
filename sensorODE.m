@@ -7,7 +7,7 @@ function dydt = sensorODE(t,y,u)
 
 %% Define parameter rate constants
 
-    
+
 %% Define initial conditions for your species
 
     
@@ -21,7 +21,7 @@ in2 = u(2);
 %% Determine ODEs of the system and set dydt
 % dydt should be a vector of the same size as y
 dydt = [
-    0, 
+    0;
 ];
 
 end
