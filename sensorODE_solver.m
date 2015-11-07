@@ -7,7 +7,13 @@ function [output,outputTime,input,inputTime] = ...
 % USAGE:
 % [output,outputTime,input,inputTime] = 
 %   sensorODE_solver(sensorODE_fh,inputStates,chatter,stochasticity,...
-%   maxInputAmpl,initCond)
+%   initCond)
+% 
+% OR
+%
+% [output,outputTime,input,inputTime] = 
+%   sensorODE_solver(sensorODE_fh,inputStates,chatter,stochasticity,...
+%   initCond, options)
 % 
 %
 % FUNCTION INPUTS:
@@ -74,7 +80,7 @@ function [output,outputTime,input,inputTime] = ...
 %
 %
 % LAST MODIFIED:
-% Oct 2015 by Julia Joung
+% November 7th, 2015 by Nader Morshed
 %
 %--------------------------------------------------------------------------
 
@@ -131,9 +137,12 @@ if chatter
 end
 
 if stochasticity
-    noiseMean = 0;
-    noiseVar = .01/max(inputStates(1,:));
-    input = abs(input+(noiseMean + sqrt(noiseVar)*randn(2,tMax)));
+    % Calculate a standard deviation equal to 1% of the max of the input.
+    noiseVar = 0.01 * max(inputStates(1,:));
+    
+    % Add a gaussian noise process onto the levels of antigen
+    randoms = [normrnd(0, noiseVar, 1, tMax); zeros(1, tMax)];
+    input = abs(input + randoms);
 end
 
 if nargin < 7
